@@ -10,7 +10,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Find Mentors", href: "/mentors" },
-    { name: "Bookings", href: "/bookings" },
+    { name: "Bookings", href: "/booking" },
     { name: "Become a Mentor", href: "/mentors/register" },
   ];
 

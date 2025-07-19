@@ -12,17 +12,38 @@ export default function MentorProfile() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedMonth, setSelectedMonth] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [isClient, setIsClient] = useState(false);
+
   const [student, setStudent] = useState("");
+  const [mentorId, setMentorId] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const studentData = localStorage.getItem("student");
+      const mentorData = localStorage.getItem("mentor");
 
+      setMentorId(mentorData);
       setStudent(studentData);
     }
   }, []);
+
   useEffect(() => {
-    if (!student) {
+    setIsClient(true);
+    if (typeof window !== "undefined") {
+      const storedStudent = localStorage.getItem("student");
+      const storedMentorId = localStorage.getItem("mentor");
+      setStudent(storedStudent);
+      setMentorId(storedMentorId);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isClient && (!student || !mentorId)) {
+      router.push("/student");
+    }
+  }, [isClient, student, mentorId]);
+  useEffect(() => {
+    if (!student || !mentor) {
       router.push("/student");
       return; // Prevent rendering while redirecting
     }

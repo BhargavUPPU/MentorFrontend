@@ -14,25 +14,38 @@ export default function MentorDiscovery() {
   });
   const [mentors, setMentors] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-    const [student, setStudent] = useState("");
+  const [student, setStudent] = useState("");
+  const [isClient, setIsClient] = useState(false);
+
+  const [mentorId, setMentorId] = useState("");
   const router = useRouter();
-    useEffect(() => {
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const studentData = localStorage.getItem("student");
-    
-        setStudent(studentData);
-      
+      const mentorData = localStorage.getItem("mentor");
+      console.log("mentor", mentorData);
+      setMentorId(mentorData);
+      setStudent(studentData);
     }
   }, []);
 
   const backendUrl =
     process.env.NEXT_PUBLIC_BACKEND || "http://localhost:5000/api";
   useEffect(() => {
-    if (!student) {
-      router.push("/student");
-      return; // Prevent rendering while redirecting
+    setIsClient(true);
+    if (typeof window !== "undefined") {
+      const storedStudent = localStorage.getItem("student");
+      const storedMentorId = localStorage.getItem("mentor");
+      setStudent(storedStudent);
+      setMentorId(storedMentorId);
     }
-  }, [student]);
+  }, []);
+
+  useEffect(() => {
+    if (isClient && (!student || !mentorId)) {
+      router.push("/student");
+    }
+  }, [isClient, student, mentorId]);
   useEffect(() => {
     // Fetch mentors from your API endpoint
     const fetchMentors = async () => {
